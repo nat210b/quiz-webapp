@@ -71,7 +71,7 @@ function QuizPage() {
     if (isPartSixOrSeven(part)) {
       query = query.in("part_scope", ["part6", "part7"]);
     } else {
-      query = query.eq("part_scope", part).limit(DEFAULT_LIMIT);
+      query = query.eq("part_scope", part).is("dual_type", null).limit(DEFAULT_LIMIT);
     }
 
     query
@@ -196,7 +196,7 @@ function QuizPage() {
               {/* Badges */}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                 <span style={{ ...S.diffBadge, color: diffColor, background: `${diffColor}18`, border: `1px solid ${diffColor}44` }}>{diffLabel}</span>
-                <span style={S.groupBadge}>กลุ่ม: {current?.word_group || current?.word_type}</span>
+                <span style={S.groupBadge}> กลุ่ม: {current?.meaning_th || "-"}</span>
               </div>
 
               <div style={{ fontSize: "0.74rem", color: "#7a84a8" }}>คำนี้เป็น part of speech อะไร?</div>
