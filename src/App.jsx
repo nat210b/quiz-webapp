@@ -1,11 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { isSupabaseConfigured, supabase } from './utils/supabaseClient'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [supabaseCheck, setSupabaseCheck] = useState({
+    loading: isSupabaseConfigured,
+    ok: null,
+    error: null,
+  })
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return
+
+    let cancelled = false
+
+    supabase.auth
+      .getSession()
+      .then(({ error }) => {
+        if (cancelled) return
+        if (error) {
+          setSupabaseCheck({ loading: false, ok: false, error: error.message })
+          return
+        }
+        setSupabaseCheck({ loading: false, ok: true, error: null })
+      })
+      .catch((err) => {
+        if (cancelled) return
+        setSupabaseCheck({
+          loading: false,
+          ok: false,
+          error: err instanceof Error ? err.message : String(err),
+        })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -27,6 +62,16 @@ function App() {
         >
           Count is {count}
         </button>
+        <p>
+          Supabase:{' '}
+          {!isSupabaseConfigured
+            ? 'not configured (copy .env.example to .env and set VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)'
+            : supabaseCheck.loading
+              ? 'checking…'
+              : supabaseCheck.ok
+                ? 'connected'
+                : `error: ${supabaseCheck.error ?? 'unknown'}`}
+        </p>
       </section>
 
       <div className="ticks"></div>

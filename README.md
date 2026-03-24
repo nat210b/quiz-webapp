@@ -14,3 +14,21 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Supabase
+
+1. Create a Supabase project and get your **Project URL** + **anon public key**.
+2. Copy `.env.example` to `.env` and set:
+
+```bash
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+```
+
+3. Run the app:
+
+```bash
+npm run dev
+```
+
+The Supabase client lives in `src/services/supabaseClient.js` and `src/App.jsx` includes a small connection check.
