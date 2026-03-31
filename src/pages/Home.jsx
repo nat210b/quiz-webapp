@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../utils/supabaseClient";
+import { getAllVocab } from "../services/vocabService";
 
-const PART5_WORDS = supabase.from("vocab_words").select("id", { count: "exact", head: true }).eq("part_scope", "part5").then(res => res.count) || 0;
-const FULL_WORDS = supabase.from("vocab_words").select("id", { count: "exact", head: true }).then(res => res.count) || 0;
+const PART5_WORDS = getAllVocab().then(
+  (data) => data.filter((w) => w.part_scope === "part5").length,
+);
+const FULL_WORDS = getAllVocab().then(
+  (data) => data.length,
+);
 
 function Home() {
   const [hovered, setHovered] = useState(null);
@@ -79,8 +83,11 @@ function Home() {
           <div>
             <strong>Part 5 tip:</strong> ดูสิ่งที่ตามหลังช่องว่าง
             <br />
-            ตามด้วย <span style={{ color: "#f76f4f", fontWeight: 700 }}>noun</span> → Preposition &nbsp;|&nbsp;{" "}
-            ตามด้วย <span style={{ color: "#4f8ef7", fontWeight: 700 }}>clause</span> → Conjunction
+            ตามด้วย{" "}
+            <span style={{ color: "#f76f4f", fontWeight: 700 }}>noun</span> →
+            Preposition &nbsp;|&nbsp; ตามด้วย{" "}
+            <span style={{ color: "#4f8ef7", fontWeight: 700 }}>clause</span> →
+            Conjunction
           </div>
         </div>
       </div>
@@ -88,20 +95,41 @@ function Home() {
   );
 }
 
-function ModeCard({ id, badge, badgeColor, title, desc, chips, count, btnColor, hovered, onHover, onStart }) {
+function ModeCard({
+  id,
+  badge,
+  badgeColor,
+  title,
+  desc,
+  chips,
+  count,
+  btnColor,
+  hovered,
+  onHover,
+  onStart,
+}) {
   return (
     <div
       className="mode-card"
       style={{
         ...S.card,
         border: hovered ? `2px solid ${badgeColor}` : "2px solid #252c44",
-        boxShadow: hovered ? `0 0 28px ${badgeColor}28` : "0 4px 20px rgba(0,0,0,0.3)",
+        boxShadow: hovered
+          ? `0 0 28px ${badgeColor}28`
+          : "0 4px 20px rgba(0,0,0,0.3)",
       }}
       onMouseEnter={() => onHover(id)}
       onMouseLeave={() => onHover(null)}
       onClick={() => onStart(id)}
     >
-      <span style={{ ...S.badge, background: `${badgeColor}1a`, color: badgeColor, border: `1px solid ${badgeColor}44` }}>
+      <span
+        style={{
+          ...S.badge,
+          background: `${badgeColor}1a`,
+          color: badgeColor,
+          border: `1px solid ${badgeColor}44`,
+        }}
+      >
         {badge}
       </span>
       <div style={S.cardTitle}>{title}</div>
@@ -111,19 +139,27 @@ function ModeCard({ id, badge, badgeColor, title, desc, chips, count, btnColor, 
           <span
             key={c.label}
             style={{
-              fontSize: "0.72rem", color: c.color,
-              background: `${c.color}18`, border: `1px solid ${c.color}44`,
-              borderRadius: 99, padding: "2px 10px",
+              fontSize: "0.72rem",
+              color: c.color,
+              background: `${c.color}18`,
+              border: `1px solid ${c.color}44`,
+              borderRadius: 99,
+              padding: "2px 10px",
             }}
           >
             {c.emoji} {c.label}
           </span>
         ))}
       </div>
-      <div style={{ fontSize: "0.75rem", color: "#7a84a8", marginBottom: 12 }}>{count} คำ</div>
+      <div style={{ fontSize: "0.75rem", color: "#7a84a8", marginBottom: 12 }}>
+        {count} คำ
+      </div>
       <button
         style={{ ...S.btn, background: btnColor }}
-        onClick={(e) => { e.stopPropagation(); onStart(id); }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onStart(id);
+        }}
       >
         เริ่มเลย →
       </button>

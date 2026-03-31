@@ -83,3 +83,16 @@ h2 {
 p {
   margin: 0;
 }
+button
+{
+  cursor: pointer;
+  padding: 3px;
+  font-size: small;
+}
+input
+{
+  background-color: white;
+  padding: 2px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
