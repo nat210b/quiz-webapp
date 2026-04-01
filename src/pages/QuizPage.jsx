@@ -36,10 +36,19 @@ const normalizeCatId = (raw) => {
   return value;
 };
 
+// Returns a single correct cat id, or for Part 5 dual-type words returns an array of accepted ids
 const getCorrectCat = (row, part) => {
   if (!row) return null;
-  // Part 5: use word_type directly (conj/prep)
-  if (part === "part5") return normalizeCatId(row.word_type);
+
+  // Part 5: dual_type words accept BOTH conj and prep as correct
+  if (part === "part5") {
+    if (row.dual_type) {
+      const t1 = normalizeCatId(row.word_type);
+      const t2 = normalizeCatId(row.dual_type);
+      return [t1, t2].filter(Boolean);
+    }
+    return normalizeCatId(row.word_type);
+  }
 
   // Reading (Part 6/7): if dual_type exists => answer "both", otherwise use word_type
   if (isPartSixOrSeven(part)) {
@@ -50,6 +59,19 @@ const getCorrectCat = (row, part) => {
   // Other parts: if dual_type exists => "both", otherwise use word_type
   if (row.dual_type) return "both";
   return normalizeCatId(row.word_type);
+};
+
+// Helper: check if a selected answer matches correctCat (supports array)
+const isAnswerCorrect = (selected, correctCat) => {
+  if (!selected || !correctCat) return false;
+  if (Array.isArray(correctCat)) return correctCat.includes(selected);
+  return selected === correctCat;
+};
+
+// Helper: check if a cat button should be highlighted green (correct answer)
+const isCatCorrect = (catId, correctCat) => {
+  if (Array.isArray(correctCat)) return correctCat.includes(catId);
+  return catId === correctCat;
 };
 
 function randomInt(max) {
@@ -169,7 +191,7 @@ function QuizPage() {
 
   const current = deck[idx] ?? null;
   const correctCat = getCorrectCat(current, part);
-  const isCorrect = selected === correctCat;
+  const isCorrect = isAnswerCorrect(selected, correctCat);
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const modeColor = part === "part5" ? "#4f8ef7" : "#a78bfa";
   const modeLabel = part === "part5" ? "PART 5" : "READING";
@@ -429,7 +451,7 @@ function QuizPage() {
                     bg = isCorrect ? "#0f2a1e" : "#2a0f0f";
                     border = `2px solid ${isCorrect ? "#4fcf8a" : "#f76f4f"}`;
                     color = isCorrect ? "#4fcf8a" : "#f76f4f";
-                  } else if (revealed && cat.id === correctCat) {
+                  } else if (revealed && isCatCorrect(cat.id, correctCat)) {
                     bg = "#0f2a1e";
                     border = "2px solid #4fcf8a";
                     color = "#4fcf8a";
@@ -508,8 +530,11 @@ function QuizPage() {
                 <InfoBox
                   label="🎯 Part of Speech"
                   val={
-                    ALL_CATS.find((c) => c.id === correctCat)?.label ??
-                    correctCat
+                    Array.isArray(correctCat)
+                      ? correctCat
+                          .map((id) => ALL_CATS.find((c) => c.id === id)?.label ?? id)
+                          .join(" / ")
+                      : (ALL_CATS.find((c) => c.id === correctCat)?.label ?? correctCat)
                   }
                 />
                 <InfoBox label="🇹🇭 ความหมาย" val={current?.meaning_th || "-"} />

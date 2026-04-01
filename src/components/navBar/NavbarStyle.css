@@ -1,0 +1,22 @@
+.navbar-Container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #0d1021;
+    align-items: center;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
+}
+.icon-Container{
+    display: flex;
+    align-items: center;
+}
+.menu-Container{
+    display: flex;
+    gap: 20px;
+    color:white;
+    font-weight: bold;
+}
