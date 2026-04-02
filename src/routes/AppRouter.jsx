@@ -9,6 +9,7 @@ import QuizPage from "../pages/QuizPage";
 import Home1 from "../pages/Home1";
 import VocabLists from "../pages/wordManagement/VocabLists";
 import Register from "../pages/register/Register";
+import Selection from "../pages/selection/Selection";
 
 // ── Routes ที่ไม่แสดง Navbar ───────────────────────────────────
 const HIDDEN_NAVBAR_ROUTES = ["/register"];
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
       { path: "/quiz/:part", element: <QuizPage /> },
       { path: "/home",       element: <Home1 /> },
       { path: "/vocab",      element: <VocabLists /> },
+      { path: "/home_V2",  element: <Selection /> },
 
       // Guest-only: login แล้ว → redirect กลับ "/"
       {

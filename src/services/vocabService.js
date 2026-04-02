@@ -8,7 +8,6 @@ export const getVocab = async (part) => {
         console.error("Error fetching vocabulary:", error);
         return [];
     }
-
     return data || [];
 }
 

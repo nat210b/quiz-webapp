@@ -1,0 +1,38 @@
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    background: white;
+}
+
+.part-selection-container {
+    display: grid;
+    grid-row: 3;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 2% 15% 0% 15%;
+
+}
+
+.part-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition:  0.3s ease, transform 0.3s ease;
+    color: black;
+    border: 1px;
+    border-style: solid;
+
+}
+
+.part-card:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-5px);
+    color: black;
+    /* transition: box-shadow 0.3s ease; */
+    box-shadow: 0px 0px 10px grey;
+}
