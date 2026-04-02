@@ -54,7 +54,7 @@ export default function Navbar() {
       <div className="navbar-Container">
         <div className="icon-Container">
           <img
-            src="../../../public/icon.jpg"
+            src="/icon.jpg"
             alt="What The Word Icon"
             className="h-10 w-10 cursor-pointer"
             onClick={() => (window.location.href = "/")}
