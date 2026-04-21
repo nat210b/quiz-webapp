@@ -90,6 +90,24 @@ function Home() {
             Conjunction
           </div>
         </div>
+
+        {/* Feedback Button */}
+        <button
+          style={{
+            ...S.btn,
+            background: "#161b2e",
+            marginTop: "8px",
+            border: "1px solid #2e3a58",
+            color: "#b0bcd8",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "8px"
+          }}
+          onClick={() => navigate("/feedback")}
+        >
+          <span style={{ fontSize: "1.2rem" }}>💬</span> แจ้งปัญหา / ข้อเสนอแนะ
+        </button>
       </div>
     </div>
   );
@@ -169,11 +187,11 @@ function ModeCard({
 
 const S = {
   root: {
-    minHeight: "100vh",
+    minHeight: "calc(100dvh - 64px)",
     background: "linear-gradient(135deg,#0d1021 0%,#131729 60%,#1a1f35 100%)",
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "center",
     padding: "24px 12px 48px",
     fontFamily: "'DM Sans', sans-serif",
   },
@@ -253,7 +271,6 @@ const S = {
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
   strong { color: #f7c94f; }
   .mode-card:hover { transform: translateY(-3px); }
   .mode-card:hover button { filter: brightness(1.1); }

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { createBrowserRouter, Navigate, Outlet, useLocation } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 
 import Navbar from "../components/navBar/Navbar";
 import { supabase } from "../utils/supabaseClient";
@@ -10,6 +15,8 @@ import Home1 from "../pages/Home1";
 import VocabLists from "../pages/wordManagement/VocabLists";
 import Register from "../pages/register/Register";
 import Selection from "../pages/selection/Selection";
+import Quiz from "../pages/quiz/Quiz";
+import FeedbackForm from "../pages/feedback/FeedbackForm";
 
 // ── Routes ที่ไม่แสดง Navbar ───────────────────────────────────
 const HIDDEN_NAVBAR_ROUTES = ["/register"];
@@ -36,7 +43,9 @@ function GuestOnlyRoute({ redirectTo = "/" }) {
       setAuthState(session ? "authed" : "guest");
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthState(session ? "authed" : "guest");
     });
 
@@ -53,18 +62,18 @@ const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { path: "/",           element: <Home /> },
+      { path: "/", element: <Home /> },
       { path: "/quiz/:part", element: <QuizPage /> },
-      { path: "/home",       element: <Home1 /> },
-      { path: "/vocab",      element: <VocabLists /> },
-      { path: "/home_V2",  element: <Selection /> },
+      { path: "/home", element: <Home1 /> },
+      { path: "/vocab", element: <VocabLists /> },
+      { path: "/home_V2", element: <Selection /> },
+      { path: "/quiz", element: <Quiz /> },
+      { path: "/feedback", element: <FeedbackForm /> },
 
       // Guest-only: login แล้ว → redirect กลับ "/"
       {
         element: <GuestOnlyRoute redirectTo="/" />,
-        children: [
-          { path: "/register", element: <Register /> },
-        ],
+        children: [{ path: "/register", element: <Register /> }],
       },
     ],
   },

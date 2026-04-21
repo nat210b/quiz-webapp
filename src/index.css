@@ -85,10 +85,13 @@ button
   padding: 3px;
   font-size: small;
 }
-input
-{
-  background-color: white;
-  padding: 2px;
-  border: 1px solid black;
-  border-radius: 8px;
+/* Removed hardcoded input white background to allow Tailwind styling. */
+/* Fix for webkit autofill to maintain dark theme styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1e2235 inset !important;
+    -webkit-text-fill-color: #e8d5a3 !important;
+    transition: background-color 5000s ease-in-out 0s;
 }

@@ -1,9 +1,14 @@
 import { supabase } from "../utils/supabaseClient"
-export const getVocab = async (part) => { 
-    const { data, error } = await supabase
-        .from("vocab_words")
-        .select("*")
-        .eq("part_scope", part);
+
+export const getVocab = async (part) => {
+    let query = supabase.from("vocab_words").select("*");
+    
+    if (part === 'part5') {
+        query = query.eq("part_scope", part);
+    }
+    
+    const { data, error } = await query;
+
     if (error) {
         console.error("Error fetching vocabulary:", error);
         return [];

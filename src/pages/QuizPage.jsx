@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isSupabaseConfigured, supabase } from "../utils/supabaseClient";
 
@@ -50,7 +50,7 @@ const getCorrectCat = (row, part) => {
     return normalizeCatId(row.word_type);
   }
 
-  // Reading (Part 6/7): if dual_type exists => answer "both", otherwise use word_type
+  // Reading (Part 6/7): use "both" if dual_type is not empty, otherwise word_type
   if (isPartSixOrSeven(part)) {
     if (row.dual_type) return "both";
     return normalizeCatId(row.word_type);
@@ -139,7 +139,8 @@ function QuizPage() {
         let query = supabase.from(QUESTIONS_TABLE).select("*");
 
         if (isPartSixOrSeven(part)) {
-          query = query.in("part_scope", ["reading"]);
+          // ดึงคำศัพท์ทั้งหมดโดยไม่กรอง part_scope
+          // query = query; 
         } else {
           query = query.eq("part_scope", part).limit(DEFAULT_LIMIT);
 
@@ -615,7 +616,7 @@ function InfoBox({ label, val }) {
 
 const S = {
   root: {
-    height: "100dvh",
+    height: "calc(100dvh - 64px)",
     background: "linear-gradient(135deg,#0d1021 0%,#131729 60%,#1a1f35 100%)",
     display: "flex",
     justifyContent: "center",
